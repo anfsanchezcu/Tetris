@@ -5,18 +5,13 @@ var fps = 40;
 var altoC = 640;
 var anchoC = 400;
 
-var anchoT = 10;
+var anchoT = 12;
 var altoT = 20;
 
 var anchoF = 40;
 var altoF = 40;
 
-var pieza=[
-    [0,1,0,0],
-    [0,1,0,0],
-    [0,1,1,0],
-    [0,0,0,0]
-];
+var pieza;
 
 //dimensiones tablero : 12*17
 var tablero = [
@@ -35,11 +30,11 @@ var tablero = [
     [1,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,2,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,2,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,2,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
     [1,1,1,1,1,1,1,1,1,1,1,1]
 ]
 var fichaGrafico=[
@@ -100,28 +95,36 @@ var objPieza = function(){
     this.x =1;
     this.y =7;
 
-    this.tipo = 4;
+    this.tipo = Math.floor(Math.random()*7);
     this.pieza = fichaGrafico[this.tipo];
     this.aux;
+    this.velocidad=0;
     
+    this.nueva =function(){
+        this.tipo = Math.floor(Math.random()*7);
+        this.x=4;
+        this.y=0;
+    }
+    this.caer=function(){ 
+        if(this.velocidad< 30){
+            this.velocidad++
+        }else{
+            this.y++;
+            this.velocidad=0;
+        }
+    }
     this.dibuja = function(){
         for(var i = 0;i<4;i++){
             for(var j=0;j<4;j++){
 
                 if(this.pieza[i][j]==1) {
                     ctx.fillStyle=colores[this.tipo];
-                    ctx.fillRect((this.x+j)*anchoF, (this.y+i)*altoF,anchoF,altoF);
+                    ctx.fillRect((this.x+j-1)*anchoF, (this.y+i-4)*altoF,anchoF,altoF);
                 }
             }
         }
     }
     this.rotar = function (){
-        console.log("Se roto la fichha");
-    }
-    this.abajo = function(){
-        console.log("Se bajo la fichha");
-    }
-    this.derecha = function(){
         this.aux=[
             [0,0,0,0],
             [0,0,0,0],
@@ -138,11 +141,19 @@ var objPieza = function(){
         }
         this.pieza =this.aux;
         console.log(this.pieza);
+    }
+    this.abajo = function(){
+        this.y++;
+    }
+    this.derecha = function(){
+        this.x++;
 
     }
     this.izquierda = function(){
-        console.log("Se left la fichha");
+        this.x--;
     }
+
+    this.nueva();
 
 }
 
@@ -191,5 +202,6 @@ function borrarCanvas(){
 function main(){
     borrarCanvas();
     pieza.dibuja();
+    pieza.caer();
     dibujarTablero();
 }
