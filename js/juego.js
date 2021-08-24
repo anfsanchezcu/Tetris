@@ -32,11 +32,12 @@ var tablero = [
     [1,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,1,1,1,1,0,0,1],
-    [1,0,0,0,0,1,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,1],
     [1,1,1,1,1,1,1,1,1,1,1,1]
 ]
+
 var fichaGrafico=[
     [
         [0,0,0,0],
@@ -101,11 +102,29 @@ var objPieza = function(){
     this.velocidad=0;
     
     this.nueva =function(){
+        
         this.tipo = Math.floor(Math.random()*7);
         console.log(this.tipo)
         this.pieza = fichaGrafico[this.tipo];
         this.x=4;
         this.y=0;
+    }
+    this.limpiar=function(){
+        var hueco;
+        for(var i=2; i<altoT;i++){
+            hueco=false;
+            for(var j =1; j<anchoT;j++){
+                if(tablero[i][j]==0){
+                    hueco=true;
+                }
+            }
+            if(hueco==false){
+                for(var j =1; j<anchoT;j++){
+                    tablero[i][j]=0;
+                }
+            }
+        }
+        
     }
     this.caer=function(){ 
         if(this.velocidad< 30 ){
@@ -115,7 +134,13 @@ var objPieza = function(){
             this.velocidad=0;
         }else{
             this.fijar();
+            this.limpiar();
             this.nueva();
+            if(this.perder()==true){//compruba si ya perdste
+                this.resetearT();
+            }
+                
+           
         }
     }
     this.colision = function(yNueva, xNueva,anguloN){
@@ -185,7 +210,30 @@ var objPieza = function(){
         if(this.colision(this.y+1,this.x-1,this.pieza)==false)
             this.x--;
     }
-
+    this.perder =function(){
+        var r= false;
+        for(var i =1; i<anchoT-1; i++){
+            if(tablero[2][i]!=0){
+                r=true;
+                console.log(tablero[2][i]+ "se pierde en "+ i)
+               
+            }
+        }
+        return r;
+    }
+    this.resetearT=function(){
+        for(var i=0; i<altoT; i++){
+            tablero[i][0]=1;
+            tablero[i][anchoT]=1;
+            for(var j = 1;j<anchoT-1;j++ ){
+                tablero[i][j]=0;
+                tablero[altoT][j]=1;
+            }
+        }
+        console.log("-----------------");
+        console.log(tablero);
+        console.log("-----------------");
+    }
     this.nueva();
 
 }
