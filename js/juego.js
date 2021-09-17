@@ -261,6 +261,30 @@ function inicializaTeclado(){
             pieza.abajo();
         }
     })
+    let canvas =document.getElementById("canvas");
+    let flag = 0;
+    let xi;
+    canvas.addEventListener("mousedown",(e)=>{ 
+        xi=e.x;
+    });
+    canvas.addEventListener("mousemove",(e)=>{ 
+        flag = 1;
+    });
+    canvas.addEventListener("mouseup",(e)=>{ 
+        if(flag==1){
+            if(xi>e.x){
+                pieza.izquierda();
+            }else if(xi<e.x){
+                pieza.derecha();
+            }
+            
+        }else{
+            pieza.arriba()
+        }
+        flag=0;
+    });
+    
+
 }
 
 function inicializa(){

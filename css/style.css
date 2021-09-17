@@ -1,9 +1,11 @@
 #canvas{
     border:solid 1px rgb(255, 255, 255);
     background-color: #222222;
-    right: 500px;
 }
 body{
     background:#000;
     text-align: center;
+}
+.container{
+   background :#0f0f0f;
 }
