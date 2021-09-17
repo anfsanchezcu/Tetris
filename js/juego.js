@@ -261,7 +261,10 @@ function inicializaTeclado(){
             pieza.abajo();
         }
     })
+
+
     let c =document.getElementById("contenedor");
+    c.addEventListener("mousedown",pieza.arriba());
     let flag = 0;
     let xi;
     c.addEventListener("mousedown",(e)=>{ 
